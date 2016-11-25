@@ -53,7 +53,7 @@
 
       // initialize the data needed
       prevIndex = currIndex;
-      slidesContainer = element(config.element);
+      slidesContainer = element(config.element).children[0];
       slides = slidesContainer.children;
       totalSlide = slides.length;
 
@@ -148,7 +148,8 @@
         var offset = generateOffset(newIndex);
 
         // offset the slide to new absolute place
-        slidesContainer.style.transform = 'translateX(' + offset + '%)';
+        var localStyle = "transform: translateX(" + offset + "%); -webkit-transform: translateX(" + offset + "%); -ms-transform: translateX(" + offset + "%);";
+        slidesContainer.setAttribute('style', localStyle);
 
         // change circle active classes if it's rendered from config
         if (config.navigation) {
@@ -173,7 +174,8 @@
 
     function addSlideOffset(item, index) {
       var offsetX = index * 100;
-      slides[index].style.transform = 'translateX(' + offsetX + '%)';
+      var localStyle = "transform: translateX(" + offsetX + "%); -webkit-transform: translateX(" + offsetX + "%); -ms-transform: translateX(" + offsetX + "%);";
+      slides[index].setAttribute('style', localStyle);
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -224,9 +226,7 @@
 
 })(window);
 
-////////////////////////////////////////////////////////////////////////////////
-
-var formy = [];
+///
 
 // var forms = formy({ element: '.page-container' });
 
