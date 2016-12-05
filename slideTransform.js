@@ -83,8 +83,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }
 
     this.goToSlide(this.currIndex);
-
-    window.SlideTransform = SlideTransform; //eslint-disable-line
   }
 
   SlideTransform.prototype.goToSlide = function goToSlide(newIndex) {
@@ -99,9 +97,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       });
 
       if (this.navigation) {
-        var slidesContainer = this.container.querySelector('.slides-container');
-        slidesContainer.children[this.prevIndex].classList.remove('active');
-        slidesContainer.children[this.currIndex].classList.add('active');
+        var stepsContainer = this.container.querySelector('.steps-container');
+        stepsContainer.children[this.prevIndex].classList.remove('active');
+        stepsContainer.children[this.currIndex].classList.add('active');
       }
     } else {
       console.error('slide index error, report this when you encountered this error.'); //eslint-disable-line
@@ -137,4 +135,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       _this3.prevSlide();
     });
   };
+
+  window.SlideTransform = SlideTransform; //eslint-disable-line
 })(window);

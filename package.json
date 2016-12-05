@@ -5,7 +5,7 @@
   "main": "slideTransform.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel -o slideTransform.js src/src.js"
+    "build": "babel -o slideTransform.js src/src.js -w"
   },
   "repository": {
     "type": "git",
