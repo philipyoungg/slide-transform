@@ -4,7 +4,7 @@
 // /////////////
 
 ((window) => {
-  const slideTransform = (config) => {
+  const defineSlideTransform = (config) => {
     const d = document;
     let container;
     let slidesContainer;
@@ -183,7 +183,7 @@
   // initialize slide transform
 
   if (typeof slideTransform === 'undefined') {
-    window.slideTransform = slideTransform; //eslint-disable-line
+    window.slideTransform = defineSlideTransform(); //eslint-disable-line
   } else {
     console.log('slideTransform already defined.'); //eslint-disable-line
   }
