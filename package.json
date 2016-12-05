@@ -1,23 +1,23 @@
 {
-  "name": "formy",
+  "name": "slide-transform",
   "version": "1.0.1",
   "description": "",
-  "main": "formy.js",
+  "main": "slideTransform.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel -o formy.js src/src.js"
+    "build": "babel -o slideTransform.js src/src.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/philipyoungg/formy.git"
+    "url": "git+https://github.com/philipyoungg/slideTransform.git"
   },
   "keywords": [],
   "author": "Philip Young Gunawan <hello@philipyoungg.com> (http://www.philipyoungg.com)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/philipyoungg/formy/issues"
+    "url": "https://github.com/philipyoungg/slideTransform/issues"
   },
-  "homepage": "https://github.com/philipyoungg/formy#readme",
+  "homepage": "https://github.com/philipyoungg/slideTransform#readme",
   "devDependencies": {
     "babel-plugin-transform-object-assign": "^6.8.0",
     "babel-preset-es2015": "^6.18.0"

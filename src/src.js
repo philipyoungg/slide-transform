@@ -1,10 +1,10 @@
 // //////////////
 // TO USE: assign variable to an element
-// var slide = formy({element: 'slide-container'})
+// var slide = slideTransform({element: 'slide-container'})
 // /////////////
 
 ((window) => {
-  const defineFormy = (config) => {
+  const slideTransform = (config) => {
     const d = document;
     let container;
     let slidesContainer;
@@ -17,8 +17,7 @@
 
     // ////////////////////////////////////////////////////////////////////////////
 
-    const forEach = (elem, callback) =>
-      [].forEach.call(elem, callback);
+    const forEach = (elem, callback) => [].forEach.call(elem, callback);
 
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -181,11 +180,11 @@
 
   // ////////////////////////////////////////////////////////////////////////////
 
-  // initialize Formy
+  // initialize slide transform
 
-  if (typeof formy === 'undefined') {
-    window.formy = defineFormy; //eslint-disable-line
+  if (typeof slideTransform === 'undefined') {
+    window.slideTransform = slideTransform; //eslint-disable-line
   } else {
-    console.log('formy already defined.'); //eslint-disable-line
+    console.log('slideTransform already defined.'); //eslint-disable-line
   }
 })(window);

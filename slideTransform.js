@@ -6,11 +6,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 // //////////////
 // TO USE: assign variable to an element
-// var slide = formy({element: 'slide-container'})
+// var slide = slideTransform({element: 'slide-container'})
 // /////////////
 
 (function (window) {
-  var defineFormy = function defineFormy(config) {
+  var slideTransform = function slideTransform(config) {
     var d = document;
     var container = void 0;
     var slidesContainer = void 0;
@@ -187,11 +187,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
   // ////////////////////////////////////////////////////////////////////////////
 
-  // initialize Formy
+  // initialize slide transform
 
-  if (typeof formy === 'undefined') {
-    window.formy = defineFormy; //eslint-disable-line
+  if (typeof slideTransform === 'undefined') {
+    window.slideTransform = slideTransform; //eslint-disable-line
   } else {
-    console.log('formy already defined.'); //eslint-disable-line
+    console.log('slideTransform already defined.'); //eslint-disable-line
   }
 })(window);
