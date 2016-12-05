@@ -5,7 +5,7 @@
   "main": "formy.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel -o formy-compiled.js src/src.js"
+    "build": "babel -o formy.js src/src.js"
   },
   "repository": {
     "type": "git",
