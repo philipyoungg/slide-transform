@@ -4,187 +4,135 @@
 // /////////////
 
 ((window) => {
-  const defineSlideTransform = (config) => {
-    const d = document;
-    let container;
-    let slidesContainer;
-    let slides;
-    let totalSlide; // totalIndex
-    let circlesContainer;
-    let circles;
-    let prevIndex;
-    let currIndex;
+  function SlideTransform(config) {
+    if (typeof config !== 'object') {
+      throw "you didn't provide object. Refer to documentation.";
+    }
+    if (!config.element) {
+      throw 'you need to provide the element on parameter inside an object';
+    }
 
-    // ////////////////////////////////////////////////////////////////////////////
+    this.navigation = typeof config.navigation === 'undefined' ? true : config.navigation;
+    this.container = document.querySelector(config.element);
+    this.totalIndex = this.container.children.length;
+    this.currIndex = config.index || 0;
+    this.prevIndex = this.currIndex;
 
-    const forEach = (elem, callback) => [].forEach.call(elem, callback);
+    this.initializeSlidesContainer();
 
+    if (this.navigation) {
+      this.renderCirclesContainer();
+      this.circlesContainer = this.container.querySelector('.circles-container');
+    }
 
-    // ////////////////////////////////////////////////////////////////////////////
+    this.goToSlide(this.currIndex);
+  }
 
-    const addSlideOffset = (item, index) => {
-      const offset = index * 100;
-      Object.assign(slides[index].style, {
+  SlideTransform.prototype.initializeSlidesContainer = function () {
+    Object.assign(this.container.style, {
+      position: 'relative',
+      overflow: 'hidden',
+    });
+
+    const proxySlidesContainer = document.createElement('div');
+    proxySlidesContainer.classList.add('slides-container');
+    Object.assign(proxySlidesContainer.style, {
+      width: '100%',
+      height: '100%',
+      position: 'absolute',
+      transition: '0.3s ease-in-out',
+    });
+
+      // cut all slides from container to slidesContainer
+    while (this.container.children.length > 0) {
+      proxySlidesContainer.appendChild(this.container.children[0]);
+    }
+
+    [].forEach.call(proxySlidesContainer.children, (slide, index) => {
+      Object.assign(slide.style, {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        transform: `translateX(${index * 100}%)`,
+        webkitTransform: `translateX(${index * 100}%)`,
+        MozTransform: `translateX(${index * 100}%)`,
+      });
+    });
+    this.container.appendChild(proxySlidesContainer);
+  };
+
+  SlideTransform.prototype.goToSlide = function (newIndex) {
+    if (newIndex >= 0 && newIndex < this.totalIndex) {
+      this.prevIndex = this.currIndex;
+      this.currIndex = newIndex;
+      const offset = newIndex * -100;
+
+      Object.assign(this.container.children[0].style, {
         transform: `translateX(${offset}%)`,
         webkitTransform: `translateX(${offset}%)`,
         MozTransform: `translateX(${offset}%)`,
       });
-    };
 
-    const initializeSlideContainer = () => {
-      container = d.querySelector(config.element);
-      if (!container) throw new Error('element are not defined or not available');
-      Object.assign(container.style, {
-        position: 'relative',
-        overflow: 'hidden',
-      });
-
-      const proxySlidesContainer = d.createElement('div');
-      Object.assign(proxySlidesContainer.style, {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        transition: '0.3s ease-in-out',
-      });
-
-      // cut all slides from container to slidesContainer
-      while (container.children.length > 0) {
-        Object.assign(container.children[0].style, {
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-        });
-        proxySlidesContainer.appendChild(container.children[0]);
+      if (this.navigation) {
+        this.container.children[1].children[this.prevIndex].classList.remove('active');
+        this.container.children[1].children[this.currIndex].classList.add('active');
       }
-
-      container.appendChild(proxySlidesContainer);
-    };
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    const goToSlide = (newIndex) => {
-      if (newIndex >= 0 && newIndex < totalSlide) {
-        prevIndex = currIndex;
-        currIndex = newIndex;
-        const offset = newIndex * -100;
-
-        Object.assign(slidesContainer.style, {
-          transform: `translateX(${offset}%)`,
-          webkitTransform: `translateX(${offset}%)`,
-          MozTransform: `translateX(${offset}%)`,
-        });
-
-        if (config.navigation) {
-          circles[prevIndex].classList.remove('active');
-          circles[newIndex].classList.add('active');
-        }
-      } else {
+    } else {
         console.error('slide index error, report this when you encountered this error.'); //eslint-disable-line
-      }
-    };
+    }
+  };
 
-    const nextSlide = () => {
-      if (currIndex < totalSlide - 1) {
-        const newIndex = currIndex + 1;
-        goToSlide(newIndex);
-      }
-    };
+  SlideTransform.prototype.nextSlide = function () {
+    if (this.currIndex < this.totalIndex - 1) {
+      const newIndex = this.currIndex + 1;
+      this.goToSlide(newIndex);
+    }
+  };
 
-    const prevSlide = () => {
-      if (currIndex > 0) {
-        const newIndex = currIndex - 1;
-        goToSlide(newIndex);
-      }
-    };
+  SlideTransform.prototype.prevSlide = function () {
+    if (this.currIndex > 0) {
+      const newIndex = this.currIndex - 1;
+      this.goToSlide(newIndex);
+    }
+  };
 
-    const subscribeNextSlide = (element) => {
-      d.querySelector(element).addEventListener('click', () => {
-        nextSlide();
-      });
-    };
+  SlideTransform.prototype.subscribeNextSlide = function () {
+    document.querySelector().addEventListener('click', () => {
+      this.nextSlide();
+    });
+  };
 
-    const subscribePrevSlide = (element) => {
-      d.querySelector(element).addEventListener('click', () => {
-        prevSlide();
-      });
-    };
+  SlideTransform.prototype.subscribePrevSlide = function () {
+    document.querySelector().addEventListener('click', () => {
+      this.prevSlide();
+    });
+  };
 
-    // ////////////////////////////////////////////////////////////////////////////
+  SlideTransform.prototype.renderCirclesContainer = function () {
+    const circlesContainer = document.createElement('div');
+    circlesContainer.classList.add('circles-container');
+    Object.assign(circlesContainer.style, {
+      position: 'absolute',
+      bottom: 0,
+      width: '100%',
+    });
+    this.container.appendChild(circlesContainer);
 
-    const renderCirclesContainer = () => {
-      circlesContainer = d.createElement('div');
-      circlesContainer.classList.add('circles-container');
-      circles = circlesContainer.children;
-      slidesContainer.parentNode.appendChild(circlesContainer);
-    };
-
-    const renderCircle = (item, index) => {
-      const circle = d.createElement('div');
+    for (let index = 0; index < this.container.children[0].children.length; index++) {
+      const circle = document.createElement('div');
       circle.classList.add('circle');
       circle.setAttribute('slide-index', index);
       circle.addEventListener('click', (e) => {
-        goToSlide(Number(e.target.getAttribute('slide-index')));
+        this.goToSlide(Number(e.target.getAttribute('slide-index')));
       });
       circlesContainer.appendChild(circle);
-    };
-
-    const renderCircles = () => {
-      forEach(slides, renderCircle);
-      // initialize the class
-      circles[currIndex].classList.add('active');
-    };
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    if (typeof config !== 'object') {
-      throw new Error("you didn't provide object. Refer to documentation.");
     }
 
-    if (!config.element) {
-      throw new Error('you need to provide the element on parameter inside an object');
-    }
-
-    if (typeof config.navigation === 'undefined') {
-      config.navigation = true; //eslint-disable-line
-    }
-
-    // initialize current index
-    currIndex = typeof config.index === 'undefined' ? 0 : config.index;
-
-    initializeSlideContainer();
-
-    // initialize the data needed
-    prevIndex = currIndex;
-    slidesContainer = container.children[0];
-    slides = slidesContainer.children;
-    totalSlide = slides.length;
-
-    forEach(slides, addSlideOffset);
-
-    // render navigation if it's true
-    if (config.navigation) {
-      renderCirclesContainer();
-      renderCircles();
-    }
-
-    goToSlide(currIndex);
-
-    return {
-      nextSlide,
-      prevSlide,
-      goToSlide,
-      subscribeNextSlide,
-      subscribePrevSlide,
-    };
+    circlesContainer.children[this.currIndex].classList.add('active');
   };
-
-  // ////////////////////////////////////////////////////////////////////////////
-
-  // initialize slide transform
-
-  if (typeof slideTransform === 'undefined') {
-    window.slideTransform = defineSlideTransform(); //eslint-disable-line
-  } else {
-    console.log('slideTransform already defined.'); //eslint-disable-line
-  }
+  window.SlideTransform = SlideTransform;
 })(window);
+
+const x = new SlideTransform({
+  element: '.container',
+});

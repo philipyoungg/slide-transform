@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="slideTransform.js"></script>
+  <link rel="stylesheet" href="slideTransform.css">
+  <title>slideTransform demo</title>
+</head>
+
+<body>
+  <h1 style="text-align: center; margin-top: 2rem; margin-bottom: 4rem;">SlideTransform Demo</h1>
+  <div class="container">
+    <div>
+      <h2>Personal Details</h2>
+      <input type="text" placeholder="name">
+      <input type="text" placeholder="email">
+    </div>
+    <div>
+      <h2>Authentication</h2>
+      <input type="text" placeholder="username">
+      <input type="text" placeholder="password">
+    </div>
+    <div>
+      <h2>Thank you!</h2>
+      <button>Submit</button>
+    </div>
+  </div>
+  <script>
+    var form = new SlideTransform({
+      element: '.container',
+    })
+
+  </script>
+</body>
+
+</html>

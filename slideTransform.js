@@ -1,8 +1,8 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 // //////////////
 // TO USE: assign variable to an element
@@ -10,188 +10,141 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 // /////////////
 
 (function (window) {
-  var slideTransform = function slideTransform(config) {
-    var d = document;
-    var container = void 0;
-    var slidesContainer = void 0;
-    var slides = void 0;
-    var totalSlide = void 0; // totalIndex
-    var circlesContainer = void 0;
-    var circles = void 0;
-    var prevIndex = void 0;
-    var currIndex = void 0;
+  function SlideTransform(config) {
+    if ((typeof config === 'undefined' ? 'undefined' : _typeof(config)) !== 'object') {
+      throw "you didn't provide object. Refer to documentation.";
+    }
+    if (!config.element) {
+      throw 'you need to provide the element on parameter inside an object';
+    }
 
-    // ////////////////////////////////////////////////////////////////////////////
+    this.navigation = typeof config.navigation === 'undefined' ? true : config.navigation;
+    this.container = document.querySelector(config.element);
+    this.totalIndex = this.container.children.length;
+    this.currIndex = config.index || 0;
+    this.prevIndex = this.currIndex;
 
-    var forEach = function forEach(elem, callback) {
-      return [].forEach.call(elem, callback);
-    };
+    this.initializeSlidesContainer();
 
-    // ////////////////////////////////////////////////////////////////////////////
+    if (this.navigation) {
+      this.renderCirclesContainer();
+      this.circlesContainer = this.container.querySelector('.circles-container');
+    }
 
-    var addSlideOffset = function addSlideOffset(item, index) {
-      var offset = index * 100;
-      _extends(slides[index].style, {
+    this.goToSlide(this.currIndex);
+  }
+
+  SlideTransform.prototype.initializeSlidesContainer = function () {
+    _extends(this.container.style, {
+      position: 'relative',
+      overflow: 'hidden'
+    });
+
+    var proxySlidesContainer = document.createElement('div');
+    proxySlidesContainer.classList.add('slides-container');
+    _extends(proxySlidesContainer.style, {
+      width: '100%',
+      height: '100%',
+      position: 'absolute',
+      transition: '0.3s ease-in-out'
+    });
+
+    // cut all slides from container to slidesContainer
+    while (this.container.children.length > 0) {
+      proxySlidesContainer.appendChild(this.container.children[0]);
+    }
+
+    [].forEach.call(proxySlidesContainer.children, function (slide, index) {
+      _extends(slide.style, {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        transform: 'translateX(' + index * 100 + '%)',
+        webkitTransform: 'translateX(' + index * 100 + '%)',
+        MozTransform: 'translateX(' + index * 100 + '%)'
+      });
+    });
+    this.container.appendChild(proxySlidesContainer);
+  };
+
+  SlideTransform.prototype.goToSlide = function (newIndex) {
+    if (newIndex >= 0 && newIndex < this.totalIndex) {
+      this.prevIndex = this.currIndex;
+      this.currIndex = newIndex;
+      var offset = newIndex * -100;
+
+      _extends(this.container.children[0].style, {
         transform: 'translateX(' + offset + '%)',
         webkitTransform: 'translateX(' + offset + '%)',
         MozTransform: 'translateX(' + offset + '%)'
       });
-    };
 
-    var initializeSlideContainer = function initializeSlideContainer() {
-      container = d.querySelector(config.element);
-      if (!container) throw new Error('element are not defined or not available');
-      _extends(container.style, {
-        position: 'relative',
-        overflow: 'hidden'
-      });
-
-      var proxySlidesContainer = d.createElement('div');
-      _extends(proxySlidesContainer.style, {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        transition: '0.3s ease-in-out'
-      });
-
-      // cut all slides from container to slidesContainer
-      while (container.children.length > 0) {
-        _extends(container.children[0].style, {
-          width: '100%',
-          height: '100%',
-          position: 'absolute'
-        });
-        proxySlidesContainer.appendChild(container.children[0]);
+      if (this.navigation) {
+        this.container.children[1].children[this.prevIndex].classList.remove('active');
+        this.container.children[1].children[this.currIndex].classList.add('active');
       }
+    } else {
+      console.error('slide index error, report this when you encountered this error.'); //eslint-disable-line
+    }
+  };
 
-      container.appendChild(proxySlidesContainer);
-    };
+  SlideTransform.prototype.nextSlide = function () {
+    if (this.currIndex < this.totalIndex - 1) {
+      var newIndex = this.currIndex + 1;
+      this.goToSlide(newIndex);
+    }
+  };
 
-    // ////////////////////////////////////////////////////////////////////////////
+  SlideTransform.prototype.prevSlide = function () {
+    if (this.currIndex > 0) {
+      var newIndex = this.currIndex - 1;
+      this.goToSlide(newIndex);
+    }
+  };
 
-    var goToSlide = function goToSlide(newIndex) {
-      if (newIndex >= 0 && newIndex < totalSlide) {
-        prevIndex = currIndex;
-        currIndex = newIndex;
-        var offset = newIndex * -100;
+  SlideTransform.prototype.subscribeNextSlide = function () {
+    var _this = this;
 
-        _extends(slidesContainer.style, {
-          transform: 'translateX(' + offset + '%)',
-          webkitTransform: 'translateX(' + offset + '%)',
-          MozTransform: 'translateX(' + offset + '%)'
-        });
+    document.querySelector().addEventListener('click', function () {
+      _this.nextSlide();
+    });
+  };
 
-        if (config.navigation) {
-          circles[prevIndex].classList.remove('active');
-          circles[newIndex].classList.add('active');
-        }
-      } else {
-        console.error('slide index error, report this when you encountered this error.'); //eslint-disable-line
-      }
-    };
+  SlideTransform.prototype.subscribePrevSlide = function () {
+    var _this2 = this;
 
-    var nextSlide = function nextSlide() {
-      if (currIndex < totalSlide - 1) {
-        var newIndex = currIndex + 1;
-        goToSlide(newIndex);
-      }
-    };
+    document.querySelector().addEventListener('click', function () {
+      _this2.prevSlide();
+    });
+  };
 
-    var prevSlide = function prevSlide() {
-      if (currIndex > 0) {
-        var newIndex = currIndex - 1;
-        goToSlide(newIndex);
-      }
-    };
+  SlideTransform.prototype.renderCirclesContainer = function () {
+    var _this3 = this;
 
-    var subscribeNextSlide = function subscribeNextSlide(element) {
-      d.querySelector(element).addEventListener('click', function () {
-        nextSlide();
-      });
-    };
+    var circlesContainer = document.createElement('div');
+    circlesContainer.classList.add('circles-container');
+    _extends(circlesContainer.style, {
+      position: 'absolute',
+      bottom: 0,
+      width: '100%'
+    });
+    this.container.appendChild(circlesContainer);
 
-    var subscribePrevSlide = function subscribePrevSlide(element) {
-      d.querySelector(element).addEventListener('click', function () {
-        prevSlide();
-      });
-    };
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    var renderCirclesContainer = function renderCirclesContainer() {
-      circlesContainer = d.createElement('div');
-      circlesContainer.classList.add('circles-container');
-      circles = circlesContainer.children;
-      slidesContainer.parentNode.appendChild(circlesContainer);
-    };
-
-    var renderCircle = function renderCircle(item, index) {
-      var circle = d.createElement('div');
+    for (var index = 0; index < this.container.children[0].children.length; index++) {
+      var circle = document.createElement('div');
       circle.classList.add('circle');
       circle.setAttribute('slide-index', index);
       circle.addEventListener('click', function (e) {
-        goToSlide(Number(e.target.getAttribute('slide-index')));
+        _this3.goToSlide(Number(e.target.getAttribute('slide-index')));
       });
       circlesContainer.appendChild(circle);
-    };
-
-    var renderCircles = function renderCircles() {
-      forEach(slides, renderCircle);
-      // initialize the class
-      circles[currIndex].classList.add('active');
-    };
-
-    // ////////////////////////////////////////////////////////////////////////////
-
-    if ((typeof config === 'undefined' ? 'undefined' : _typeof(config)) !== 'object') {
-      throw new Error("you didn't provide object. Refer to documentation.");
     }
 
-    if (!config.element) {
-      throw new Error('you need to provide the element on parameter inside an object');
-    }
-
-    if (typeof config.navigation === 'undefined') {
-      config.navigation = true; //eslint-disable-line
-    }
-
-    // initialize current index
-    currIndex = typeof config.index === 'undefined' ? 0 : config.index;
-
-    initializeSlideContainer();
-
-    // initialize the data needed
-    prevIndex = currIndex;
-    slidesContainer = container.children[0];
-    slides = slidesContainer.children;
-    totalSlide = slides.length;
-
-    forEach(slides, addSlideOffset);
-
-    // render navigation if it's true
-    if (config.navigation) {
-      renderCirclesContainer();
-      renderCircles();
-    }
-
-    goToSlide(currIndex);
-
-    return {
-      nextSlide: nextSlide,
-      prevSlide: prevSlide,
-      goToSlide: goToSlide,
-      subscribeNextSlide: subscribeNextSlide,
-      subscribePrevSlide: subscribePrevSlide
-    };
+    circlesContainer.children[this.currIndex].classList.add('active');
   };
-
-  // ////////////////////////////////////////////////////////////////////////////
-
-  // initialize slide transform
-
-  if (typeof slideTransform === 'undefined') {
-    window.slideTransform = slideTransform; //eslint-disable-line
-  } else {
-    console.log('slideTransform already defined.'); //eslint-disable-line
-  }
+  window.SlideTransform = SlideTransform;
 })(window);
+
+var x = new SlideTransform({
+  element: '.container'
+});
