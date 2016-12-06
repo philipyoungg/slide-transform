@@ -1,4 +1,11 @@
 ((window) => {
+  // helpers
+  const forEach = (array, callback) => {
+    for (let i = 0; i < array.length; i++) {
+      callback(array[i], i);
+    }
+  };
+
   function SlideTransform(config) {
     const initializeSlidesContainer = () => {
       Object.assign(this.container.style, {
@@ -21,7 +28,7 @@
         proxySlidesContainer.appendChild(this.container.children[0]);
       }
 
-      [].forEach.call(proxySlidesContainer.children, (slide, index) => {
+      forEach(proxySlidesContainer.children, (slide, index) => {
         Object.assign(slide.style, {
           width: '100%',
           height: '100%',
@@ -54,15 +61,15 @@
     // initialize
 
     if (typeof config !== 'object') {
-      throw "you didn't provide object. Refer to documentation.";
+      throw new Error("you didn't provide object. Refer to documentation.");
     }
     if (!config.element) {
-      throw 'you need to provide the element on parameter inside an object';
+      throw new Error('you need to provide the element on parameter inside an object');
     }
 
     this.navigation = typeof config.navigation === 'undefined' ? true : config.navigation;
     this.container = document.querySelector(config.element);
-    if (!this.container) throw 'container element not found';
+    if (!this.container) throw new Error('container element not found');
     this.totalIndex = this.container.children.length;
     this.currIndex = config.index || 0;
     this.prevIndex = this.currIndex;
@@ -112,14 +119,14 @@
     }
   };
 
-  SlideTransform.prototype.subscribeNextSlide = function subscribeNextSlide() {
-    document.querySelector().addEventListener('click', () => {
+  SlideTransform.prototype.subscribeNextSlide = function subscribeNextSlide(element) {
+    document.querySelector(element).addEventListener('click', () => {
       this.nextSlide();
     });
   };
 
-  SlideTransform.prototype.subscribePrevSlide = function subscribePrevSlide() {
-    document.querySelector().addEventListener('click', () => {
+  SlideTransform.prototype.subscribePrevSlide = function subscribePrevSlide(element) {
+    document.querySelector(element).addEventListener('click', () => {
       this.prevSlide();
     });
   };

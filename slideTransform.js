@@ -5,6 +5,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 (function (window) {
+  var forEach = function forEach(array, callback) {
+    for (var i = 0; i < array.length; i++) {
+      callback(array[i], i);
+    }
+  };
+
   function SlideTransform(config) {
     var _this = this;
 
@@ -29,7 +35,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         proxySlidesContainer.appendChild(_this.container.children[0]);
       }
 
-      [].forEach.call(proxySlidesContainer.children, function (slide, index) {
+      forEach(proxySlidesContainer.children, function (slide, index) {
         _extends(slide.style, {
           width: '100%',
           height: '100%',
@@ -62,15 +68,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     // initialize
 
     if ((typeof config === 'undefined' ? 'undefined' : _typeof(config)) !== 'object') {
-      throw "you didn't provide object. Refer to documentation.";
+      throw new Error("you didn't provide object. Refer to documentation.");
     }
     if (!config.element) {
-      throw 'you need to provide the element on parameter inside an object';
+      throw new Error('you need to provide the element on parameter inside an object');
     }
 
     this.navigation = typeof config.navigation === 'undefined' ? true : config.navigation;
     this.container = document.querySelector(config.element);
-    if (!this.container) throw 'container element not found';
+    if (!this.container) throw new Error('container element not found');
     this.totalIndex = this.container.children.length;
     this.currIndex = config.index || 0;
     this.prevIndex = this.currIndex;
@@ -120,18 +126,18 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }
   };
 
-  SlideTransform.prototype.subscribeNextSlide = function subscribeNextSlide() {
+  SlideTransform.prototype.subscribeNextSlide = function subscribeNextSlide(element) {
     var _this2 = this;
 
-    document.querySelector().addEventListener('click', function () {
+    document.querySelector(element).addEventListener('click', function () {
       _this2.nextSlide();
     });
   };
 
-  SlideTransform.prototype.subscribePrevSlide = function subscribePrevSlide() {
+  SlideTransform.prototype.subscribePrevSlide = function subscribePrevSlide(element) {
     var _this3 = this;
 
-    document.querySelector().addEventListener('click', function () {
+    document.querySelector(element).addEventListener('click', function () {
       _this3.prevSlide();
     });
   };

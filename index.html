@@ -27,10 +27,19 @@
       <button>Submit</button>
     </div>
   </div>
+  <div style="text-align: center;">
+    <div style="display: inline-block;">
+      <button id="prev">Previous</button>
+      <button id="next">Next</button>
+    </div>
+  </div>
   <script>
     var form = new SlideTransform({
       element: '.container',
-    })
+    });
+
+    form.subscribePrevSlide('#prev');
+    form.subscribeNextSlide('#next');
 
   </script>
 </body>
