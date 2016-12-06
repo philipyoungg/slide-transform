@@ -41,11 +41,12 @@
     };
 
     const renderStepsContainer = (container) => {
+      const slidesContainer = container.querySelector('slides-container');
       const stepsContainer = document.createElement('div');
       stepsContainer.classList.add('steps-container');
       container.appendChild(stepsContainer);
 
-      for (let index = 0; index < container.children[0].children.length; index++) {
+      for (let index = 0; index < slidesContainer.children.length; index++) {
         const step = document.createElement('div');
         step.classList.add('step');
         step.setAttribute('slide-index', index);
@@ -54,8 +55,6 @@
         });
         stepsContainer.appendChild(step);
       }
-
-      stepsContainer.children[this.currIndex].classList.add('active');
     };
 
     // initialize
