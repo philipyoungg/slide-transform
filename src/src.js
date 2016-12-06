@@ -7,8 +7,8 @@
   };
 
   function SlideTransform(config) {
-    const initializeSlidesContainer = () => {
-      Object.assign(this.container.style, {
+    const initializeSlidesContainer = (container) => {
+      Object.assign(container.style, {
         position: 'relative',
         overflow: 'hidden',
       });
@@ -24,8 +24,8 @@
       });
 
         // cut all slides from container to slidesContainer
-      while (this.container.children.length > 0) {
-        proxySlidesContainer.appendChild(this.container.children[0]);
+      while (container.children.length > 0) {
+        proxySlidesContainer.appendChild(container.children[0]);
       }
 
       forEach(proxySlidesContainer.children, (slide, index) => {
@@ -37,15 +37,15 @@
           webkitTransform: `translateX(${index * 100}%)`,
         });
       });
-      this.container.appendChild(proxySlidesContainer);
+      container.appendChild(proxySlidesContainer);
     };
 
-    const renderStepsContainer = () => {
+    const renderStepsContainer = (container) => {
       const stepsContainer = document.createElement('div');
       stepsContainer.classList.add('steps-container');
-      this.container.appendChild(stepsContainer);
+      container.appendChild(stepsContainer);
 
-      for (let index = 0; index < this.container.children[0].children.length; index++) {
+      for (let index = 0; index < container.children[0].children.length; index++) {
         const step = document.createElement('div');
         step.classList.add('step');
         step.setAttribute('slide-index', index);
@@ -74,10 +74,10 @@
     this.currIndex = config.index || 0;
     this.prevIndex = this.currIndex;
 
-    initializeSlidesContainer();
+    initializeSlidesContainer(this.container);
 
     if (this.navigation) {
-      renderStepsContainer();
+      renderStepsContainer(this.container);
       this.stepsContainer = this.container.querySelector('.steps-container');
     }
 
