@@ -41,7 +41,7 @@
     };
 
     const renderStepsContainer = (container) => {
-      const slidesContainer = container.querySelector('slides-container');
+      const slidesContainer = container.querySelector('.slides-container');
       const stepsContainer = document.createElement('div');
       stepsContainer.classList.add('steps-container');
       container.appendChild(stepsContainer);

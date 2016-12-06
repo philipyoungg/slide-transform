@@ -5,6 +5,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 (function (window) {
+  // helpers
   var forEach = function forEach(array, callback) {
     for (var i = 0; i < array.length; i++) {
       callback(array[i], i);
@@ -14,8 +15,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   function SlideTransform(config) {
     var _this = this;
 
-    var initializeSlidesContainer = function initializeSlidesContainer() {
-      _extends(_this.container.style, {
+    var initializeSlidesContainer = function initializeSlidesContainer(container) {
+      _extends(container.style, {
         position: 'relative',
         overflow: 'hidden'
       });
@@ -31,8 +32,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       });
 
       // cut all slides from container to slidesContainer
-      while (_this.container.children.length > 0) {
-        proxySlidesContainer.appendChild(_this.container.children[0]);
+      while (container.children.length > 0) {
+        proxySlidesContainer.appendChild(container.children[0]);
       }
 
       forEach(proxySlidesContainer.children, function (slide, index) {
@@ -44,15 +45,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
           webkitTransform: 'translateX(' + index * 100 + '%)'
         });
       });
-      _this.container.appendChild(proxySlidesContainer);
+      container.appendChild(proxySlidesContainer);
     };
 
-    var renderStepsContainer = function renderStepsContainer() {
+    var renderStepsContainer = function renderStepsContainer(container) {
+      var slidesContainer = container.querySelector('.slides-container');
       var stepsContainer = document.createElement('div');
       stepsContainer.classList.add('steps-container');
-      _this.container.appendChild(stepsContainer);
+      container.appendChild(stepsContainer);
 
-      for (var index = 0; index < _this.container.children[0].children.length; index++) {
+      for (var index = 0; index < slidesContainer.children.length; index++) {
         var step = document.createElement('div');
         step.classList.add('step');
         step.setAttribute('slide-index', index);
@@ -61,8 +63,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         });
         stepsContainer.appendChild(step);
       }
-
-      stepsContainer.children[_this.currIndex].classList.add('active');
     };
 
     // initialize
@@ -81,10 +81,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     this.currIndex = config.index || 0;
     this.prevIndex = this.currIndex;
 
-    initializeSlidesContainer();
+    initializeSlidesContainer(this.container);
 
     if (this.navigation) {
-      renderStepsContainer();
+      renderStepsContainer(this.container);
       this.stepsContainer = this.container.querySelector('.steps-container');
     }
 
