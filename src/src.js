@@ -1,4 +1,4 @@
-((window) => {
+((window, d) => {
   // helpers
   const forEach = (array, callback) => {
     for (let i = 0; i < array.length; i++) {
@@ -13,7 +13,7 @@
         overflow: 'hidden',
       });
 
-      const proxySlidesContainer = document.createElement('div');
+      const proxySlidesContainer = d.createElement('div');
       proxySlidesContainer.classList.add('slides-container');
       Object.assign(proxySlidesContainer.style, {
         width: '100%',
@@ -42,12 +42,12 @@
 
     const renderStepsContainer = (container) => {
       const slidesContainer = container.querySelector('.slides-container');
-      const stepsContainer = document.createElement('div');
+      const stepsContainer = d.createElement('div');
       stepsContainer.classList.add('steps-container');
       container.appendChild(stepsContainer);
 
       for (let index = 0; index < slidesContainer.children.length; index++) {
-        const step = document.createElement('div');
+        const step = d.createElement('div');
         step.classList.add('step');
         step.setAttribute('slide-index', index);
         step.addEventListener('click', (e) => {
@@ -67,7 +67,7 @@
     }
 
     this.navigation = typeof config.navigation === 'undefined' ? true : config.navigation;
-    this.container = document.querySelector(config.element);
+    this.container = d.querySelector(config.element);
     if (!this.container) throw new Error('container element not found');
     this.totalIndex = this.container.children.length;
     this.currIndex = config.index || 0;
@@ -119,16 +119,16 @@
   };
 
   SlideTransform.prototype.subscribeNextSlide = function subscribeNextSlide(element) {
-    document.querySelector(element).addEventListener('click', () => {
+    d.querySelector(element).addEventListener('click', () => {
       this.nextSlide();
     });
   };
 
   SlideTransform.prototype.subscribePrevSlide = function subscribePrevSlide(element) {
-    document.querySelector(element).addEventListener('click', () => {
+    d.querySelector(element).addEventListener('click', () => {
       this.prevSlide();
     });
   };
 
-  window.SlideTransform = SlideTransform; //eslint-disable-line
-})(window);
+  window.SlideTransform = config => new SlideTransform(config); //eslint-disable-line
+})(window, document);

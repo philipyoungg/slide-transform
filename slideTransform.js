@@ -4,7 +4,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-(function (window) {
+(function (window, d) {
   // helpers
   var forEach = function forEach(array, callback) {
     for (var i = 0; i < array.length; i++) {
@@ -21,7 +21,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         overflow: 'hidden'
       });
 
-      var proxySlidesContainer = document.createElement('div');
+      var proxySlidesContainer = d.createElement('div');
       proxySlidesContainer.classList.add('slides-container');
       _extends(proxySlidesContainer.style, {
         width: '100%',
@@ -50,12 +50,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
     var renderStepsContainer = function renderStepsContainer(container) {
       var slidesContainer = container.querySelector('.slides-container');
-      var stepsContainer = document.createElement('div');
+      var stepsContainer = d.createElement('div');
       stepsContainer.classList.add('steps-container');
       container.appendChild(stepsContainer);
 
       for (var index = 0; index < slidesContainer.children.length; index++) {
-        var step = document.createElement('div');
+        var step = d.createElement('div');
         step.classList.add('step');
         step.setAttribute('slide-index', index);
         step.addEventListener('click', function (e) {
@@ -75,7 +75,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }
 
     this.navigation = typeof config.navigation === 'undefined' ? true : config.navigation;
-    this.container = document.querySelector(config.element);
+    this.container = d.querySelector(config.element);
     if (!this.container) throw new Error('container element not found');
     this.totalIndex = this.container.children.length;
     this.currIndex = config.index || 0;
@@ -129,7 +129,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   SlideTransform.prototype.subscribeNextSlide = function subscribeNextSlide(element) {
     var _this2 = this;
 
-    document.querySelector(element).addEventListener('click', function () {
+    d.querySelector(element).addEventListener('click', function () {
       _this2.nextSlide();
     });
   };
@@ -137,10 +137,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   SlideTransform.prototype.subscribePrevSlide = function subscribePrevSlide(element) {
     var _this3 = this;
 
-    document.querySelector(element).addEventListener('click', function () {
+    d.querySelector(element).addEventListener('click', function () {
       _this3.prevSlide();
     });
   };
 
-  window.SlideTransform = SlideTransform; //eslint-disable-line
-})(window);
+  window.SlideTransform = function (config) {
+    return new SlideTransform(config);
+  }; //eslint-disable-line
+})(window, document);
