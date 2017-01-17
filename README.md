@@ -13,7 +13,7 @@ This library helps you to separate single div to several pages. Example case: It
 ```html
 <!-- add this on head -->
 <head>
-    <script src="slideTransform.js"></script>
+    <script src="slideTransform.min.js"></script>
     <link rel="stylesheet" href="slideTransform.css">
 </head>
 <body>
