@@ -45,8 +45,9 @@ The container selector must have `width` and `height`.
 }
 ```
 
-## Structure used
+## Structure
 
+### HTML structure
 ```html
 
 <form class="container"> <!-- container form -->
@@ -68,7 +69,7 @@ The container selector must have `width` and `height`.
 
 ```
 
-## Slide binding
+### Slide binding
 
 ```javascript
 
