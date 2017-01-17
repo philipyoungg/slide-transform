@@ -4,9 +4,9 @@ demo available on [http://slide.philipyoungg.com](http://slide.philipyoungg.com)
 
 ## Motivation
 
-I wanted to make user experience better when filling out form. Tried to seach on Google and found no similar library available. So I made this.
+I wanted to make user experience better when filling out form. Tried to seach on Google and found no similar library available, so I made this.
 
-This library helps you to separate single div to several pages. Example case: tt makes filling long form easier for user. They can also go back to previous  and next page by using prev/next button .
+This library helps you to separate single div to several pages. Example case: It makes filling long form easier for user. They can also go back to previous  and next page by using prev/next button .
 
 ## How to use
 
