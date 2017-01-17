@@ -75,8 +75,8 @@ The container selector must have `width` and `height`.
 
 // bind the HTML to form instance
 var form = newSlideTransform({
-  element: '.container', // the class
-  navigation: true, // optional: use false if you don't want to render current form location"
+  element: '.container',
+  navigation: true,
 })
 
 ```
