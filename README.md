@@ -105,7 +105,12 @@ var mySlides = newSlideTransform(config)
 ### Bind slide navigation
 ```javascript
 
-mySlides.goToSlide(3) // move to slide with index 3 
+var button = document.querySelector('#page3')
+
+button.addEventListener('click', function() {
+  mySlides.goToSlide(3)
+}) // move to slide with index 3 
+
 mySlides.subscribePrevSlide('#prev') // bind id prev to previous slide 
 mySlides.subscribeNextSlide('#next') // bind id next to next slide 
 
